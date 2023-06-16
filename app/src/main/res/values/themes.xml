@@ -6,4 +6,5 @@
     </style>
 
     <style name="Theme.ContactList" parent="Base.Theme.ContactList" />
+
 </resources>
