@@ -7,7 +7,8 @@ import com.rosekn.contactlist.databinding.ActivityAddContactBinding
 import android.widget.Toast
 import android.text.TextWatcher
 import android.text.Editable
-
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 
 class AddContact : AppCompatActivity() {
@@ -35,12 +36,12 @@ class AddContact : AppCompatActivity() {
 
             }
         }
-        binding.etFirstName.addTextChangedListener(createTextWatcher())
-        binding.etLastName.addTextChangedListener(createTextWatcher())
-        binding.etMail.addTextChangedListener(createTextWatcher())
-        binding.etPhone.addTextChangedListener(createTextWatcher())
+        binding.etFirstName.addTextChangedListener(createTextWatcher(binding.tvFirstName))
+        binding.etLastName.addTextChangedListener(createTextWatcher(binding.tvLastName))
+        binding.etMail.addTextChangedListener(createTextWatcher(binding.tvMail))
+        binding.etPhone.addTextChangedListener(createTextWatcher(binding.tvPhone))
     }
-    private fun createTextWatcher(): TextWatcher {
+    private fun createTextWatcher(view:TextInputLayout):TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -50,14 +51,19 @@ class AddContact : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // Not used in this example
+                val text = view.editText?.text.toString()
+                if(text.isNotEmpty() && !text[0].isUpperCase()){
+                    val correct= text.replaceFirstChar{ it.uppercase()}
+                    view.editText?.setText(correct)
+                    view.editText?.setSelection(correct.length)
+                }
             }
         }
     }
 
     fun validatePage():Boolean {
-        val first= binding.tvFirstName.editText?.text.toString()
-        val last=binding.tvLastName.editText?.text.toString()
+        val first= binding.tvFirstName.editText?.text.toString().capitalize()
+        val last=binding.tvLastName.editText?.text.toString().capitalize()
         val phone=binding.tvPhone.editText?.text.toString()
         val email=binding.tvMail.editText?.text.toString()
         var error=false
